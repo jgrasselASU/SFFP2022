@@ -7,7 +7,7 @@ success, image = vidcap.read()
 size = (image.shape[1], image.shape[0])
 count = 0
 
-vid_out = cv2.VideoWriter('video_out/sal_video1.mp4',cv2.VideoWriter_fourcc(*'mp4v'), 29.97, size)
+vid_out = cv2.VideoWriter('video_out/sal_video1.mp4', cv2.VideoWriter_fourcc(*'mp4v'), 29.97, size)
 
 while success:
     print('Processing Frame', count)
