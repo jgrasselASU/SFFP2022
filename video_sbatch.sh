@@ -2,7 +2,7 @@
 
 #SBATCH -N 1
 #SBATCH -n 14
-#SBATCH -t 0-00:10:00
+#SBATCH -t 0-00:20:00
 #SBATCH -p serial
 #SBATCH -q normal
 #SBATCH -o slurm.%j.out
