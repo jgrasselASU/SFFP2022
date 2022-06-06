@@ -2,13 +2,13 @@
 
 #SBATCH -N 1
 #SBATCH -n 24
-#SBATCH -t 0-00:20:00
+#SBATCH -t 0-00:60:00
 #SBATCH -p serial
 #SBATCH -q normal
 #SBATCH -o slurm.%j.out
 #SBATCH -e slurm.%j.err
 #SBATCH --mail-type=ALL
-#SBATCH --mail-user=%u@asu.edu
+#SBATCH --mail-user=jgrassel@asu.edu
 #SBATCH --export=NONE
 
 module purge
