@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 from saliency_models import gbvs
 
-vidcap = cv2.VideoCapture('video_in/drive_30sec.mp4')
+vidcap = cv2.VideoCapture('./scratch/jgrasse/video_in/drive_30sec.mp4')
 success, image = vidcap.read()
 size = (image.shape[1], image.shape[0])
 count = 0
@@ -13,7 +13,7 @@ while success:
     print('Processing Frame', count)
     frame_sal_map = gbvs.compute_saliency(image)
     # cv2.imwrite("./video_out/frame_im%d.jpg" % count, image)
-    cv2.imwrite("./video_out/frame_sal%d.jpg" % count, frame_sal_map)
+    cv2.imwrite("./scratch/jgrassel/video_out/frame_sal%d.jpg" % count, frame_sal_map)
 
     frame_sal_map = cv2.cvtColor(frame_sal_map, cv2.COLOR_GRAY2RGB)
 
