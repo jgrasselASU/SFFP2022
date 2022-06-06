@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 from saliency_models import gbvs
 
-vidcap = cv2.VideoCapture('/scratch/jgrasse/video_in/drive_30sec.mp4')
+vidcap = cv2.VideoCapture('/scratch/jgrassel/video_in/drive_30sec.mp4')
 success, image = vidcap.read()
 size = (image.shape[1], image.shape[0])
 count = 0
