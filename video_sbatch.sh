@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #SBATCH -N 1
-#SBATCH -n 28
+#SBATCH -n 14
 #SBATCH -t 0-00:60:00
 #SBATCH -p serial
 #SBATCH -q normal
