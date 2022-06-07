@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import os
 from saliency_models import gbvs
 
 vidcap = cv2.VideoCapture('/scratch/jgrassel/video_in/drive_5sec.mp4')

@@ -11,7 +11,7 @@
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=jgrassel@asu.edu
 #SBATCH --array 1-2
-#SBATCH --export=NONE
+#SBATCH --export=export_var1='199',export_var2='299'
 
 module purge
 
