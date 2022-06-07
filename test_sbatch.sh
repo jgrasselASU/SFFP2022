@@ -1,10 +1,10 @@
 #!/bin/bash
 
 #SBATCH -N 1
-#SBATCH -n 1
-#SBATCH -c 2
+#SBATCH -n 3
+#SBATCH -c 1
 #SBATCH -t 0-00:01:00
-#SBATCH -p serial
+#SBATCH -p parallel
 #SBATCH -q normal
 #SBATCH -o slurm.%j.out
 #SBATCH -e slurm.%j.err
