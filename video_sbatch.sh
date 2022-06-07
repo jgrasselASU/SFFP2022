@@ -2,8 +2,10 @@
 
 #SBATCH -N 1
 #SBATCH -n 1
+#SBATCH -c 1
+#SBATCH -array 1-3
 #SBATCH -t 0-00:60:00
-#SBATCH -p serial
+#SBATCH -p parallel
 #SBATCH -q normal
 #SBATCH -o slurm.%j.out
 #SBATCH -e slurm.%j.err
