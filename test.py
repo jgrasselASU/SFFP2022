@@ -8,6 +8,7 @@ n = int(os.environ['SLURM_NTASKS'])
 k = int(os.environ['export_var1'])
 l = int(os.environ['export_var2'])
 
+c = int(os.environ['SLURM_CPUS_PER_TASK'])
 
 print('My array task id: ' + str(i))
 print('Total array task count: ' + str(j))

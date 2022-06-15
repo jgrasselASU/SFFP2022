@@ -2,18 +2,18 @@
 
 #SBATCH -N 1
 #SBATCH -n 1
-#SBATCH -c 1
-#SBATCH -t 0-00:60:00
+#SBATCH -c 28
+#SBATCH -t 0-01:00:00
 #SBATCH -p parallel
 #SBATCH -q normal
 #SBATCH -o slurm.%j.out
 #SBATCH -e slurm.%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=jgrassel@asu.edu
-#SBATCH --job-name='one_core_gbvs'
+#SBATCH --export=video_in_dir='/video_in',video_name='/drive1.mp4',image_in_dir='/image_in'
 
 module purge
 
 module load python/3.7.1
 
-python video_gbvs.py
+python frame_gbvs.py
