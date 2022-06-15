@@ -4,6 +4,8 @@ import ffmpeg
 from datetime import datetime
 import os
 
+# Runs in about double the time of the length of the video
+
 # # Defaults
 # video_in_dir = 'video_in'
 # video_name = '/drive1.mp4'
