@@ -10,9 +10,9 @@ import os
 # image_in_dir = 'image_in'
 
 # If given variable
-video_in_dir = int(os.environ['video_in_dir'])
-video_name = int(os.environ['video_name'])
-image_in_dir = int(os.environ['image_in_dir'])
+video_in_dir = str(os.environ['video_in_dir'])
+video_name = str(os.environ['video_name'])
+image_in_dir = str(os.environ['image_in_dir'])
 
 # Get metadata for frame size and frame rate for later use
 print("Getting metadata: " + str(datetime.now()))
