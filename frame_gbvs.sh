@@ -2,8 +2,8 @@
 
 #SBATCH -N 1
 #SBATCH -n 1
-#SBATCH -c 7
-#SBATCH -t 0-01:00:00
+#SBATCH -c 28
+#SBATCH -t 0-02:00:00
 #SBATCH -p parallel
 #SBATCH -q normal
 #SBATCH -o slurm.%j.out

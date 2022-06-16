@@ -20,17 +20,20 @@ cpu_count = int(os.environ['SLURM_CPUS_PER_TASK'])
 # image_in_dir = 'image_in'
 # cpu_count = 2
 
+print('Retrieving metadata at ' + str(datetime.now()))
 with open(image_in_dir + 'metadata.json') as json_file:
     metadata = json.load(json_file)
 
 nb_frames = int(metadata['nb_frames'])
 
 # parallel
+print('Starting Parallel computing: ' + str(datetime.now()))
 start = time.perf_counter()
 pool = mp.Pool(cpu_count)
 results = pool.map(get_gbvs_data, [img_num for img_num in range(nb_frames)])
 pool.close()
 end = time.perf_counter()
+print('Finished parallel computing: ' + str(datetime.now()))
 print('Parallel time to complete: ' + str(round(end-start, 2)))
 
 # #single
