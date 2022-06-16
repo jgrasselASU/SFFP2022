@@ -26,21 +26,23 @@ with open(image_in_dir + 'metadata.json') as json_file:
 
 nb_frames = int(metadata['nb_frames'])
 
-# parallel
-print('Starting Parallel computing: ' + str(datetime.now()))
-start = time.perf_counter()
-pool = mp.Pool(cpu_count)
-results = pool.map(get_gbvs_data, [img_num for img_num in range(nb_frames)])
-pool.close()
-end = time.perf_counter()
-print('Finished parallel computing: ' + str(datetime.now()))
-print('Parallel time to complete: ' + str(round(end-start, 2)))
-
-# #single
+# # parallel
+# print('Starting Parallel computing: ' + str(datetime.now()))
 # start = time.perf_counter()
-# results = []
-# for img_num in range(nb_frames):
-#     results.append(get_gbvs_data(img_num))
+# pool = mp.Pool(cpu_count)
+# results = pool.map(get_gbvs_data, [img_num for img_num in range(nb_frames)])
+# pool.close()
 # end = time.perf_counter()
-# print(results)
-# print('Single Thread: '+ str(round(end-start, 2)))
+# print('Finished parallel computing: ' + str(datetime.now()))
+# print('Parallel time to complete: ' + str(round(end-start, 2)))
+
+#single
+print('Starting Single computing: ' + str(datetime.now()))
+start = time.perf_counter()
+results = []
+for img_num in range(nb_frames):
+    results.append(get_gbvs_data(img_num))
+end = time.perf_counter()
+print(results)
+print('Finishing single computing: ' + str(datetime.now()))
+print('Single Thread: '+ str(round(end-start, 2)))
