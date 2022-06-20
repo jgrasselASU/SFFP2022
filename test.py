@@ -1,9 +1,24 @@
 import os
 import numpy as np
+import scipy.io
+import ffmpeg
+import json
 
-gbvs_results = np.load('gbvs_out/gbvs_results.npy')
+# m = scipy.io.loadmat('old_reference/freeNorm er0043startingatsecondtrial 2012-06-01 003.mat')
+#
+# print(m['eyetrackRecord']['x'])
+# print(m['eyetrackRecord']['y'])
+# print(m['eyetrackRecord']['pa'])
 
-print(gbvs_results.shape)
+# metadata = ffmpeg.probe('video_in/drive1.mp4')
+# metadata['streams'][0]['vid_title'] = 'drive1.mp4'
+# metadata = json.dumps(metadata['streams'][0]['title'], indent=4)
+# print(metadata)
+# metadata = metadata['streams'][0]       # ['width', 'height', 'r_frame_rate', 'nb_frames']
+# json_meta = json.dumps(metadata, indent=4)
+# f = open(image_in_dir + 'metadata.json', 'w')
+# f.write(json_meta)
+# f.close()
 
 # i = int(os.environ['SLURM_ARRAY_TASK_ID'])
 # j = int(os.environ['SLURM_ARRAY_TASK_COUNT'])

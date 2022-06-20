@@ -1,5 +1,5 @@
-import cv2
 import os
+import cv2
 from saliency_models import gbvs
 import json
 import multiprocessing as mp
@@ -15,19 +15,25 @@ def get_gbvs_data(img_num):
     return np.array(sal_map)
 
 
-# image_in_dir = str(os.environ['image_in_dir'])
-# cpu_count = int(os.environ['SLURM_CPUS_PER_TASK'])
+# Check whether on cluster or not
+if os.getenv('image_in_dir', 0) != 0:
+    image_in_dir = str(os.getenv('image_in_dir'))
+    gbvs_out_dir = str(os.getenv('gbvs_out_dir'))
+    cpu_count = int(os.getenv('SLURM_CPUS_PER_TASK'))
+else:  # Default for local testing
+    image_in_dir = 'image_in/'
+    gbvs_out_dir = 'gbvs_out/'
+    cpu_count = 4
 
-image_in_dir = 'image_in/'
-cpu_count = 4
-
+# --- Video Input Metadata --- #
 print('Retrieving metadata at ' + str(datetime.now()))
 with open(image_in_dir + 'metadata.json') as json_file:
     metadata = json.load(json_file)
 
 nb_frames = int(metadata['nb_frames'])
+video_name = str(metadata['title'])
 
-# parallel
+# --- Parallel GBVS Computation ---#
 print('Starting Parallel computing: ' + str(datetime.now()))
 start = time.perf_counter()
 pool = mp.Pool(cpu_count)
@@ -39,9 +45,11 @@ print('Finished parallel computing: ' + str(datetime.now()))
 print('Parallel time to complete: ' + str(round(end-start, 2)))
 
 print('Saving numpy array: ' + str(datetime.now()))
-np.save('gbvs_out/gbvs_results.npy', results)
+np.save(gbvs_out_dir + video_name + '.npy', results)  # gbvs_results[frame,row,column]
 
-# #single
+print('frame_gbvs complete at: ' + str(datetime.now()))
+
+# #single (outdated, refer to parallel)
 # print('Starting Single computing: ' + str(datetime.now()))
 # start = time.perf_counter()
 # results = []

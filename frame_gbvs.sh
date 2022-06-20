@@ -10,7 +10,7 @@
 #SBATCH -e slurm.%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=jgrassel@asu.edu
-#SBATCH --export=image_in_dir='/scratch/jgrassel/image_in/'
+#SBATCH --export=image_in_dir='/scratch/jgrassel/image_in/',gbvs_out_dir='/scratch/jgrassel/image_in/'
 
 module purge
 
