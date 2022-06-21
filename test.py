@@ -4,29 +4,17 @@ import scipy.io
 import ffmpeg
 import json
 
-sal_map = np.load('gbvs_out/drive1.mp4.npy')
+fixations = np.loadtxt('old_reference/Fixations.txt')
 
-# for i in range(sal_map.shape[0]):
-#     for j in range(sal_map.shape[1]):
-#         for k in range(sal_map.shape[2]):
-#             if sal_map[i,j,k] > 255:
-#                 sal_map[i,j,k] = 255
-#             elif sal_map[i,j,k] < 0:
-#                 sal_map[i,j,k] = 0
+print(15 in fixations[:, 0])
 
-print(np.sum(sal_map < 0))
-print(np.sum(sal_map > 255))
-print(np.sum(sal_map))
+frame_match = np.where(fixations[:, 0] == 0)
+frame, x, y = fixations[frame_match][0]
 
-sal_map[np.where(sal_map < 0)] = 0
-sal_map[np.where(sal_map > 255)] = 255
-
-print(np.sum(sal_map < 0))
-print(np.sum(sal_map > 255))
-print(np.sum(sal_map))
+print(x)
+print(y)
 
 # m = scipy.io.loadmat('old_reference/freeNorm er0043startingatsecondtrial 2012-06-01 003.mat')
-#
 # print(m['eyetrackRecord']['x'])
 # print(m['eyetrackRecord']['y'])
 # print(m['eyetrackRecord']['pa'])

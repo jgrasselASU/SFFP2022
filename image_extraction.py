@@ -12,7 +12,7 @@ if os.getenv('image_in_dir', 0) != 0:
     video_in_dir = str(os.getenv('video_in_dir'))
 else:  # Default for local testing
     video_in_dir = 'video_in/'
-    video_name = 'drive1.mp4'
+    video_name = 'riese_drive_30sec.mp4'
     image_in_dir = 'image_in/'
 
 # Get metadata for frame size and frame rate for later use
