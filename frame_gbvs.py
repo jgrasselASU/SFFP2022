@@ -18,7 +18,7 @@ def get_gbvs_data(img_num):
 
 
 # Check whether on cluster or not
-if os.getenv('image_in_dir', 0) != 0:
+if os.getenv('SLURM_CPUS_PER_TASK', 0) != 0:
     image_in_dir = str(os.getenv('image_in_dir'))
     gbvs_out_dir = str(os.getenv('gbvs_out_dir'))
     cpu_count = int(os.getenv('SLURM_CPUS_PER_TASK'))

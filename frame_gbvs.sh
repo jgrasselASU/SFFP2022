@@ -3,14 +3,14 @@
 #SBATCH -N 1
 #SBATCH -n 1
 #SBATCH -c 28
-#SBATCH -t 0-02:00:00
+#SBATCH -t 0-10:00:00
 #SBATCH -p parallel
 #SBATCH -q normal
 #SBATCH -o slurm.%j.out
 #SBATCH -e slurm.%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=jgrassel@asu.edu
-#SBATCH --export=image_in_dir='/scratch/jgrassel/image_in/',gbvs_out_dir='/scratch/jgrassel/image_in/'
+#SBATCH --export=image_in_dir='/scratch/jgrassel/image_in/',gbvs_out_dir='/scratch/jgrassel/gbvs_out/'
 
 module purge
 
