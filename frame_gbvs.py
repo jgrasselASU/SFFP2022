@@ -12,6 +12,8 @@ def get_gbvs_data(img_num):
     print('Computing image: ' + str(img_num) + ' at ' + str(datetime.now()))
     img = cv2.imread(image_in_dir + str(img_num) + '.jpg')
     sal_map = gbvs.compute_saliency(img)
+    sal_map[np.where(sal_map < 0)] = 0
+    sal_map[np.where(sal_map > 255)] = 255
     return np.array(sal_map)
 
 
