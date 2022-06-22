@@ -1,18 +1,47 @@
-import os
 import numpy as np
-import scipy.io
-import ffmpeg
+from PIL import Image, ImageDraw
 import json
+import os
 
-fixations = np.loadtxt('old_reference/Fixations.txt')
+sal_map = np.load('gbvs_out/0.npy')
 
-print(15 in fixations[:, 0])
+heat = np.zeros((sal_map.shape[0],sal_map.shape[1], 4), dtype=np.uint8)
 
-frame_match = np.where(fixations[:, 0] == 0)
-frame, x, y = fixations[frame_match][0]
+print(sal_map)
 
-print(x)
-print(y)
+def get_heat_map(sal_map):
+    heat[:, :, 3] = (255-sal_map) * 0.8
+    heat[:, :, 0] = sal_map
+    heat[:, :, 1] = sal_map
+    heat[:, :, 2] = sal_map
+    heat_img = Image.fromarray(heat, 'RGBA')
+    return heat_img
+
+print(heat)
+
+heat_img = Image.fromarray(heat, 'RGBA')
+
+img = Image.open('image_in/0.jpg')
+img = img.convert('RGBA')
+
+out_img = Image.alpha_composite(img, heat_img)
+
+out_img = out_img.convert('RGB')
+
+out_img.save('old_reference/heatmap_test.jpg', quality=95)
+
+
+
+####################################################################
+# fixations = np.loadtxt('old_reference/Fixations.txt')
+#
+# print(15 in fixations[:, 0])
+#
+# frame_match = np.where(fixations[:, 0] == 0)
+# frame, x, y = fixations[frame_match][0]
+#
+# print(x)
+# print(y)
 
 # m = scipy.io.loadmat('old_reference/freeNorm er0043startingatsecondtrial 2012-06-01 003.mat')
 # print(m['eyetrackRecord']['x'])
