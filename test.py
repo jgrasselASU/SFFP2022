@@ -2,36 +2,47 @@ import numpy as np
 from PIL import Image, ImageDraw
 import json
 import os
+import scipy.io
 
-sal_map = np.load('gbvs_out/0.npy')
+m = scipy.io.loadmat('old_reference/freeNorm er0043startingatsecondtrial 2012-06-01 003.mat')
 
-heat = np.zeros((sal_map.shape[0],sal_map.shape[1], 4), dtype=np.uint8)
+x = m['eyetrackRecord']['x'][0][0][0]
+y = m['eyetrackRecord']['y'][0][0][0]
+t = m['eyetrackRecord']['t'][0][0][0]
+missing = m['eyetrackRecord']['missing'][0][0][0]
 
-print(sal_map)
+for i in range(x.shape[0]):
+    print(x[i])
+    print(y[i])
+    print(t[i])
+    print(missing[i])
 
-def get_heat_map(sal_map):
-    heat[:, :, 3] = (255-sal_map) * 0.8
-    heat[:, :, 0] = sal_map
-    heat[:, :, 1] = sal_map
-    heat[:, :, 2] = sal_map
-    heat_img = Image.fromarray(heat, 'RGBA')
-    return heat_img
-
-print(heat)
-
-heat_img = Image.fromarray(heat, 'RGBA')
-
-img = Image.open('image_in/0.jpg')
-img = img.convert('RGBA')
-
-out_img = Image.alpha_composite(img, heat_img)
-
-out_img = out_img.convert('RGB')
-
-out_img.save('old_reference/heatmap_test.jpg', quality=95)
-
-
-
+# sal_map = np.load('gbvs_out/0.npy')
+#
+# heat = np.zeros((sal_map.shape[0],sal_map.shape[1], 4), dtype=np.uint8)
+#
+# print(sal_map)
+#
+# def get_heat_map(sal_map):
+#     heat[:, :, 3] = (255-sal_map) * 0.8
+#     heat[:, :, 0] = sal_map
+#     heat[:, :, 1] = sal_map
+#     heat[:, :, 2] = sal_map
+#     heat_img = Image.fromarray(heat, 'RGBA')
+#     return heat_img
+#
+# print(heat)
+#
+# heat_img = Image.fromarray(heat, 'RGBA')
+#
+# img = Image.open('image_in/0.jpg')
+# img = img.convert('RGBA')
+#
+# out_img = Image.alpha_composite(img, heat_img)
+#
+# out_img = out_img.convert('RGB')
+#
+# out_img.save('old_reference/heatmap_test.jpg', quality=95)
 ####################################################################
 # fixations = np.loadtxt('old_reference/Fixations.txt')
 #
