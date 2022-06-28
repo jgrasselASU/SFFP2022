@@ -3,19 +3,58 @@ from PIL import Image, ImageDraw
 import json
 import os
 import scipy.io
+from saliency_metrics import video_salience_metrics as vsm
 
-m = scipy.io.loadmat('old_reference/freeNorm er0043startingatsecondtrial 2012-06-01 003.mat')
+fixations = np.loadtxt('old_reference/Fixations.txt')
 
-x = m['eyetrackRecord']['x'][0][0][0]
-y = m['eyetrackRecord']['y'][0][0][0]
-t = m['eyetrackRecord']['t'][0][0][0]
-missing = m['eyetrackRecord']['missing'][0][0][0]
+sal_map = []
+gt = []
 
-for i in range(x.shape[0]):
-    print(x[i])
-    print(y[i])
-    print(t[i])
-    print(missing[i])
+for i in range(240, 275):
+    tmp_sal = np.load('gbvs_out/' + str(i) + '.npy')
+    sal_map.append(tmp_sal)
+
+    tmp_gt = np.zeros(tmp_sal.shape)
+
+    if i in fixations[:, 0]:
+        frame_match = np.where(fixations[:, 0] == i)
+        frame, row, col = fixations[frame_match][0]
+        tmp_gt[int(np.round(row)),int(np.round(col))] = 1
+
+    gt.append(tmp_gt)
+
+
+sal_map = np.stack(sal_map, axis=0)
+gt = np.stack(gt, axis=0)
+
+print(sal_map.shape)
+print(gt.shape)
+
+print(np.sum(gt))
+
+sal_map = vsm.normalize_map(sal_map)
+
+print(np.max(sal_map))
+print(np.min(sal_map))
+
+v_auc = vsm.v_auc_judd(sal_map,gt)
+
+print(v_auc)
+
+# ---------------------- OLD CODE -------------------------- #
+
+# m = scipy.io.loadmat('old_reference/freeNorm er0043startingatsecondtrial 2012-06-01 003.mat')
+#
+# x = m['eyetrackRecord']['x'][0][0][0]
+# y = m['eyetrackRecord']['y'][0][0][0]
+# t = m['eyetrackRecord']['t'][0][0][0]
+# missing = m['eyetrackRecord']['missing'][0][0][0]
+#
+# for i in range(x.shape[0]):
+#     print(x[i])
+#     print(y[i])
+#     print(t[i])
+#     print(missing[i])
 
 # sal_map = np.load('gbvs_out/0.npy')
 #
