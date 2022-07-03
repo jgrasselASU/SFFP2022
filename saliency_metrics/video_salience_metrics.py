@@ -57,6 +57,33 @@ def v_auc_judd(s_map, gt):
 
 # ------------------------------------------------------------------------------------------------ #
 
+# --------------------------- Range of Video AUC JUDD ----------------------------------- #
+def range_auc_judd(s, e, fxy_fixations_dir, sal_map_dir):
+	fixations = np.loadtxt(fxy_fixations_dir)
+
+	sal_map = []
+	gt = []
+
+	for i in range(s, e):
+		tmp_sal = np.load(sal_map_dir + str(i) + '.npy')
+		sal_map.append(tmp_sal)
+
+		tmp_gt = np.zeros(tmp_sal.shape)
+
+		if i in fixations[:, 0]:
+			frame_match = np.where(fixations[:, 0] == i)
+			frame, col, row = fixations[frame_match][0]
+			tmp_gt[int(np.round(row)), int(np.round(col))] = 1
+
+		gt.append(tmp_gt)
+
+	sal_map = np.stack(sal_map, axis=0)
+	gt = np.stack(gt, axis=0)
+	sal_map = normalize_map(sal_map)
+	return v_auc_judd(sal_map, gt)
+
+
+# ------------------------------------------------------------------------------------------------ #
 
 def generate_dummy(size=14,num_fixations=100,num_salience_points=200):
 	# first generate dummy gt and salience map
