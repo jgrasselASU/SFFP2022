@@ -6,10 +6,6 @@ import scipy.io
 # from saliency_metrics import video_salience_metrics as vsm
 
 
-for i in range(5,10):
-    print(i)
-
-
 # fixations = np.loadtxt('old_reference/Fixations.txt')
 
 # sal_map = []
