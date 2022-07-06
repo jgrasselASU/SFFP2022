@@ -3,13 +3,18 @@ from PIL import Image, ImageDraw
 import json
 import os
 import scipy.io
-# from saliency_metrics import video_salience_metrics as vsm
+from saliency_metrics import video_salience_metrics as vsm
 
 
-# fixations = np.loadtxt('old_reference/Fixations.txt')
+fixations = np.loadtxt('old_reference/Fixations.txt')
 
-# sal_map = []
-# gt = []
+sal_map = []
+gt = []
+
+auc_score = vsm.range_auc_judd(200,260,'old_reference/Fixations.txt','gbvs_out/')
+
+print(auc_score)
+
 #
 # for i in range(240, 270):
 #     tmp_sal = np.load('gbvs_out/' + str(i) + '.npy')

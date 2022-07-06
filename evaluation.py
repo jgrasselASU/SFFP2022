@@ -5,6 +5,8 @@ from matplotlib.pyplot import figure
 import os
 from datetime import datetime
 import json
+import multiprocessing as mp
+from itertools import repeat
 
 # Check whether on cluster or not
 if os.getenv('SLURM_CPUS_PER_TASK', 0) != 0:
@@ -23,18 +25,24 @@ with open(image_in_dir + 'metadata.json') as json_file:
 
 nb_frames = int(metadata['nb_frames'])
 video_name = str(metadata['title'])
-#------------------------------#
+# ------------------------------ #
 
 fixation_dir = 'old_reference/Fixations.txt'
 
 rad = 5
+nb_frames = 20
 
-auc_results = []
+pool = mp.Pool(cpu_count)
+auc_results = pool.starmap(vsm.range_auc_judd,
+                           zip([s for s in range(0, nb_frames-rad)],
+                               [e for e in range(rad, nb_frames)],
+                               repeat(fixation_dir),
+                               repeat(gbvs_out_dir)))
+pool.close()
 
-for i in range(rad, nb_frames-rad):
-    print('Processing range: ' + str(i-rad) + ', ' + str(i+rad))
-    auc_score = vsm.range_auc_judd(i-rad, i+rad, 'old_reference/Fixations.txt', gbvs_out_dir)
-    auc_results.append(auc_score)
+print(auc_results)
+
+np.savetxt('auc_results_rad14', auc_results)
 
 figure(figsize=(10, 2), dpi=100)
 
