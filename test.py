@@ -3,6 +3,7 @@ from PIL import Image, ImageDraw
 import json
 import os
 import scipy.io
+from scipy.ndimage import gaussian_filter
 from saliency_metrics import video_salience_metrics as vsm
 
 
@@ -11,37 +12,33 @@ fixations = np.loadtxt('old_reference/Fixations.txt')
 sal_map = []
 gt = []
 
-auc_score = vsm.range_auc_judd(200,260,'old_reference/Fixations.txt','gbvs_out/')
+for i in range(172, 192):
+    tmp_sal = np.load('gbvs_out/' + str(i) + '.npy')
+    sal_map.append(tmp_sal)
 
+    tmp_gt = np.zeros(tmp_sal.shape)
+
+    if i in fixations[:, 0]:
+        frame_match = np.where(fixations[:, 0] == i)
+        frame, col, row = fixations[frame_match][0]
+        tmp_gt[int(np.round(row)), int(np.round(col))] = 1
+
+    gt.append(tmp_gt)
+
+
+sal_map = np.stack(sal_map, axis=0)
+sal_map = vsm.normalize_map(sal_map)
+
+gt = np.stack(gt, axis=0)
+gt_cont = gt*1000
+gt_cont = gaussian_filter(gt_cont, sigma=[5, 45, 45])
+gt_cont = vsm.normalize_map(gt_cont)
+
+cc_score = vsm.cc(sal_map, gt_cont)
+auc_score = vsm.v_auc_judd(sal_map, gt)
+
+print(cc_score)
 print(auc_score)
-
-#
-# for i in range(240, 270):
-#     tmp_sal = np.load('gbvs_out/' + str(i) + '.npy')
-#     sal_map.append(tmp_sal)
-#
-#     tmp_gt = np.zeros(tmp_sal.shape)
-#
-#     if i in fixations[:, 0]:
-#         frame_match = np.where(fixations[:, 0] == i)
-#         frame, col, row = fixations[frame_match][0]
-#         tmp_gt[int(np.round(row)), int(np.round(col))] = 1
-#
-#     gt.append(tmp_gt)
-#
-#
-# sal_map = np.stack(sal_map, axis=0)
-# gt = np.stack(gt, axis=0)
-#
-# print(sal_map.shape)
-# print(gt.shape)
-#
-# print(np.sum(gt))
-#
-# sal_map = vsm.normalize_map(sal_map)
-#
-# print(np.max(sal_map))
-# print(np.min(sal_map))
 #
 # v_auc = vsm.v_auc_judd(sal_map, gt)
 #

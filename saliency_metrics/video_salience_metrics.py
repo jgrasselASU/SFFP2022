@@ -336,7 +336,7 @@ def cc(s_map,gt):
 	s_map_norm = (s_map - np.mean(s_map))/np.std(s_map)
 	gt_norm = (gt - np.mean(gt))/np.std(gt)
 	a = s_map_norm
-	b= gt_norm
+	b = gt_norm
 	r = (a*b).sum() / math.sqrt((a*a).sum() * (b*b).sum());
 	return r
 
