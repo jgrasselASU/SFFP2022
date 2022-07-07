@@ -1,7 +1,5 @@
 import numpy as np
 from saliency_metrics import video_salience_metrics as vsm
-from matplotlib import pyplot as plt
-from matplotlib.pyplot import figure
 import os
 from datetime import datetime
 import json
@@ -16,7 +14,7 @@ if os.getenv('SLURM_CPUS_PER_TASK', 0) != 0:
 else:  # Default for local testing
     image_in_dir = 'image_in/'
     gbvs_out_dir = 'gbvs_out/'
-    cpu_count = 2
+    cpu_count = 4
 
 # --- Video Input Metadata --- #
 print('Retrieving metadata at ' + str(datetime.now()))
@@ -29,22 +27,34 @@ video_name = str(metadata['title'])
 
 fixation_dir = 'old_reference/Fixations.txt'
 
-rad = 5
-nb_frames = 20
+rad = 14
+nb_frames = 30
+
+# ------------- Evaluate Video Using Rolling AUC ---------------- #
 
 pool = mp.Pool(cpu_count)
-auc_results = pool.starmap(vsm.range_auc_judd,
+auc_judd_results = pool.starmap(vsm.range_auc_judd,
                            zip([s for s in range(0, nb_frames-rad)],
                                [e for e in range(rad, nb_frames)],
                                repeat(fixation_dir),
                                repeat(gbvs_out_dir)))
 pool.close()
+print('auc complete')
+np.savetxt('evaluation_out/auc_judd_' + video_name + '_rad' + str(rad), auc_judd_results)
 
-print(auc_results)
 
-np.savetxt('auc_results_rad14', auc_results)
+# ------------- Evaluate Video Using Rolling Pearson's Correlations ---------------- #
+frame_sigma = 6
+px_sigma = 45
 
-figure(figsize=(10, 2), dpi=100)
-
-plt.plot(auc_results)
-plt.savefig('auc_results')
+pool = mp.Pool(cpu_count)
+cc_results = pool.starmap(vsm.range_cc,
+                           zip([s for s in range(0, nb_frames-rad)],
+                               [e for e in range(rad, nb_frames)],
+                               repeat(fixation_dir),
+                               repeat(gbvs_out_dir),
+                               repeat(frame_sigma),
+                               repeat(px_sigma)))
+pool.close()
+print('cc complete')
+np.savetxt('evaluation_out/cc_' + video_name + '_rad' + str(rad) + '_fs' + str(frame_sigma) + '_pxs' + str(px_sigma), cc_results)

@@ -4,6 +4,7 @@ import random
 import sys
 import cv2
 import math
+from scipy.ndimage import gaussian_filter
 
 
 # --------------------------- Video AUC JUDD ----------------------------------- #
@@ -88,13 +89,31 @@ def range_auc_judd(s, e, fxy_fixations_dir, sal_map_dir):
 
 # --------------------------- Video Correlation ----------------------------------- #
 
-def v_cc(s_map,gt):
-	s_map_norm = (s_map - np.mean(s_map))/np.std(s_map)
-	gt_norm = (gt - np.mean(gt))/np.std(gt)
-	a = s_map_norm
-	b= gt_norm
-	r = (a*b).sum() / math.sqrt((a*a).sum() * (b*b).sum());
-	return r
+def range_cc(s, e, fxy_fixations_dir, sal_map_dir, frame_sigma, px_sigma):
+	fixations = np.loadtxt(fxy_fixations_dir)
+
+	sal_map = []
+	gt = []
+
+	for i in range(s, e):
+		tmp_sal = np.load(sal_map_dir + str(i) + '.npy')
+		sal_map.append(tmp_sal)
+
+		tmp_gt = np.zeros(tmp_sal.shape)
+
+		if i in fixations[:, 0]:
+			frame_match = np.where(fixations[:, 0] == i)
+			frame, col, row = fixations[frame_match][0]
+			tmp_gt[int(np.round(row)), int(np.round(col))] = 100000
+
+		gt.append(tmp_gt)
+
+	sal_map = np.stack(sal_map, axis=0)
+	sal_map = normalize_map(sal_map)
+	gt = np.stack(gt, axis=0)
+	gt = gaussian_filter(gt, sigma=[frame_sigma, px_sigma, px_sigma])
+	gt = normalize_map(gt)
+	return cc(sal_map, gt)
 
 # ----------------------------------------------------------------------------------------------- #
 
@@ -117,8 +136,11 @@ def generate_dummy(size=14,num_fixations=100,num_salience_points=200):
 
 def normalize_map(s_map):
 	# normalize the salience map (as done in MIT code)
-	norm_s_map = (s_map - np.min(s_map))/((np.max(s_map)-np.min(s_map))*1.0)
-	return norm_s_map
+	if np.max(s_map) == 0:
+		return s_map
+	else:
+		norm_s_map = (s_map - np.min(s_map))/((np.max(s_map)-np.min(s_map))*1.0)
+		return norm_s_map
 
 def discretize_gt(gt):
 	import warnings
