@@ -16,4 +16,4 @@ module purge
 
 module load python/3.7.1
 
-python frame_gbvs.py
+python evaluation.py
