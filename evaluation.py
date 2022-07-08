@@ -28,10 +28,8 @@ video_name = str(metadata['title'])
 fixation_dir = 'old_reference/Fixations.txt'
 
 rad = 14
-nb_frames = 30
 
 # ------------- Evaluate Video Using Rolling AUC ---------------- #
-
 pool = mp.Pool(cpu_count)
 auc_judd_results = pool.starmap(vsm.range_auc_judd,
                            zip([s for s in range(0, nb_frames-rad)],
