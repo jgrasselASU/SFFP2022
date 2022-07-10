@@ -14,7 +14,7 @@ if os.getenv('SLURM_CPUS_PER_TASK', 0) != 0:
 else:  # Default for local testing
     image_in_dir = 'image_in/'
     gbvs_out_dir = 'gbvs_out/'
-    cpu_count = 4
+    cpu_count = 3
 
 # --- Video Input Metadata --- #
 print('Retrieving metadata at ' + str(datetime.now()))
@@ -27,7 +27,7 @@ video_name = str(metadata['title'])
 
 fixation_dir = 'old_reference/Fixations.txt'
 
-rad = 14
+rad = 5
 
 # ------------- Evaluate Video Using Rolling AUC ---------------- #
 pool = mp.Pool(cpu_count)

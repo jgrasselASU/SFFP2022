@@ -1,3 +1,4 @@
+import PIL.Image
 import numpy as np
 from PIL import Image, ImageDraw
 import json
@@ -5,40 +6,57 @@ import os
 import scipy.io
 from scipy.ndimage import gaussian_filter
 from saliency_metrics import video_salience_metrics as vsm
+from PIL import Image, ImageDraw
+from matplotlib import pyplot as plt
+# from matplotlib.pyplot import figure
+
+# --------- Creating an Image Overlay Dashboard --------------- #
+
+auc_judd = np.loadtxt('evaluation_out/auc_judd_riese_drive_30sec.mp4_rad5')
+
+fig = plt.figure(figsize=(10, 2), dpi=100)
+plt.plot(auc_judd)
+
+fig.savefig('test_img_plt', dpi=100)
+
+img = PIL.Image.frombytes('RGB', fig.get_width_height(), fig.tostring_rgb())
+
+img.save('test_img_pil.jpg')
 
 
-fixations = np.loadtxt('old_reference/Fixations.txt')
 
-sal_map = []
-gt = []
-
-for i in range(172, 192):
-    tmp_sal = np.load('gbvs_out/' + str(i) + '.npy')
-    sal_map.append(tmp_sal)
-
-    tmp_gt = np.zeros(tmp_sal.shape)
-
-    if i in fixations[:, 0]:
-        frame_match = np.where(fixations[:, 0] == i)
-        frame, col, row = fixations[frame_match][0]
-        tmp_gt[int(np.round(row)), int(np.round(col))] = 1
-
-    gt.append(tmp_gt)
-
-
-sal_map = np.stack(sal_map, axis=0)
-sal_map = vsm.normalize_map(sal_map)
-
-gt = np.stack(gt, axis=0)
-gt_cont = gt*1000
-gt_cont = gaussian_filter(gt_cont, sigma=[5, 45, 45])
-gt_cont = vsm.normalize_map(gt_cont)
-
-cc_score = vsm.cc(sal_map, gt_cont)
-auc_score = vsm.v_auc_judd(sal_map, gt)
-
-print(cc_score)
-print(auc_score)
+# fixations = np.loadtxt('old_reference/Fixations.txt')
+#
+# sal_map = []
+# gt = []
+#
+# for i in range(172, 192):
+#     tmp_sal = np.load('gbvs_out/' + str(i) + '.npy')
+#     sal_map.append(tmp_sal)
+#
+#     tmp_gt = np.zeros(tmp_sal.shape)
+#
+#     if i in fixations[:, 0]:
+#         frame_match = np.where(fixations[:, 0] == i)
+#         frame, col, row = fixations[frame_match][0]
+#         tmp_gt[int(np.round(row)), int(np.round(col))] = 1
+#
+#     gt.append(tmp_gt)
+#
+#
+# sal_map = np.stack(sal_map, axis=0)
+# sal_map = vsm.normalize_map(sal_map)
+#
+# gt = np.stack(gt, axis=0)
+# gt_cont = gt*1000
+# gt_cont = gaussian_filter(gt_cont, sigma=[5, 45, 45])
+# gt_cont = vsm.normalize_map(gt_cont)
+#
+# cc_score = vsm.cc(sal_map, gt_cont)
+# auc_score = vsm.v_auc_judd(sal_map, gt)
+#
+# print(cc_score)
+# print(auc_score)
 #
 # v_auc = vsm.v_auc_judd(sal_map, gt)
 #
