@@ -30,33 +30,37 @@ nb_frames = int(metadata['nb_frames'])
 video_name = str(metadata['title'])
 
 # ------ Evaluation Parameters ----- #
-rad = 5  # Frame radius forward and backward analyzed for each data point
+rad = 14 # Frame radius forward and backward analyzed for each data point
 # E.g. rad = 5, then when determining the metric for frame 7, frames 2 through 12 will be analyzed
-frame_sigma = 6  # Gaussian blur through time standard deviation
-px_sigma = 45  # Gaussian blur spatially
+frame_sigma = 4  # Gaussian blur through time standard deviation
+px_sigma = 76  # Gaussian blur spatially
+
+# ------ For changing local settings ----- #
+start = 165
+end = 215
 
 # ------------- Evaluate Video Using Rolling AUC ---------------- #
-print('Starting AUC evalutation')
-pool = mp.Pool(cpu_count)
-auc_judd_results = pool.starmap(vsm.range_auc_judd,
-                           zip([s for s in range(0, nb_frames-rad)],
-                               [e for e in range(rad, nb_frames)],
-                               repeat(fixation_dir),
-                               repeat(gbvs_out_dir)))
-pool.close()
-np.savetxt(eval_dir + 'auc_judd_' + video_name + '_rad' + str(rad) + '.txt', auc_judd_results)
-print('AUC evaluation complete')
+# print('Starting AUC evalutation')
+# pool = mp.Pool(cpu_count)
+# auc_judd_results = pool.starmap(vsm.range_auc_judd,
+#                            zip([s for s in range(start, end-rad)],
+#                                [e for e in range(start+rad, end)],
+#                                repeat(fixation_dir),
+#                                repeat(gbvs_out_dir)))
+# pool.close()
+# np.savetxt(eval_dir + 'auc_judd_' + video_name + '_rad' + str(rad) + '.txt', auc_judd_results)
+# print('AUC evaluation complete')
 
 # ------------- Evaluate Video Using Rolling Pearson's Correlations ---------------- #
 print("Starting Pearson's correlation evaluation")
 pool = mp.Pool(cpu_count)
 cc_results = pool.starmap(vsm.range_cc,
-                           zip([s for s in range(0, nb_frames-rad)],
-                               [e for e in range(rad, nb_frames)],
+                           zip([s for s in range(start, end-rad)],
+                               [e for e in range(start+rad, end)],
                                repeat(fixation_dir),
                                repeat(gbvs_out_dir),
                                repeat(frame_sigma),
                                repeat(px_sigma)))
 pool.close()
-np.savetxt(eval_dir + 'cc_' + video_name + '_rad' + str(rad) + '_fs' + str(frame_sigma) + '_pxs' + str(px_sigma), cc_results)
+np.savetxt(eval_dir + 'cc_' + video_name + '_rad' + str(rad) + '_fs' + str(frame_sigma) + '_pxs' + str(px_sigma) + '.txt', cc_results)
 print('Correlation evaluation complete')

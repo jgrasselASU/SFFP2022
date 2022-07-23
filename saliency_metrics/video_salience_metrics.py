@@ -23,8 +23,6 @@ def v_auc_judd(s_map, gt):
 
 	thresholds = sorted(set(thresholds))
 
-	# fp_list = []
-	# tp_list = []
 	area = []
 	area.append((0.0, 0.0))
 	for thresh in thresholds:
@@ -41,21 +39,13 @@ def v_auc_judd(s_map, gt):
 		fp = (np.sum(temp) - num_overlap) / ((np.shape(gt)[0] * np.shape(gt)[1] * np.shape(gt)[2]) - num_fixations)
 
 		area.append((round(tp, 4), round(fp, 4)))
-	# tp_list.append(tp)
-	# fp_list.append(fp)
 
-	# tp_list.reverse()
-	# fp_list.reverse()
+
 	area.append((1.0, 1.0))
-	# tp_list.append(1.0)
-	# fp_list.append(1.0)
-	# print tp_list
 	area.sort(key=lambda x: x[0])
 	tp_list = [x[0] for x in area]
 	fp_list = [x[1] for x in area]
 	return np.trapz(np.array(tp_list), np.array(fp_list))
-
-
 # ------------------------------------------------------------------------------------------------ #
 
 # --------------------------- Range of Video AUC JUDD ----------------------------------- #
@@ -368,55 +358,3 @@ def kldiv(s_map,gt):
 	gt = gt/(np.sum(gt)*1.0)
 	eps = 2.2204e-16
 	return np.sum(gt * np.log(eps + gt/(s_map + eps)))
-
-
-
-
-################################################
-# img = cv2.imread('/home/tarun/mine/tensorflow_examples/image.jpg',0)
-# print 'sim',similarity(img,img)
-# print 'cc',cc(img,img)
-# print 'kldiv',kldiv(img,img)
-# import sys
-# sys.exit(0)
-
-
-#############################################
-
-
-
-
-
-
-# # this is just the name its not actually discretised (binary)
-# gt = cv2.imread('my_discretised_gt.jpg',0)
-#
-# #d_gt = np.zeros(gt.shape)
-# #d_gt[gt>0]=1.0
-#
-#
-# s_map = cv2.imread('smap_resized.jpg',0)
-# s_map_norm = normalize_map(s_map)
-#
-#
-# auc_judd_score = auc_judd(s_map_norm,gt)
-# print 'auc judd :', auc_judd_score
-# auc_borji_score = auc_borji(s_map_norm,gt)
-# print 'auc borji :', auc_borji_score
-# auc_shuff_score = auc_shuff(s_map_norm,gt,gt)
-# print 'auc shuffled :', auc_shuff_score
-#
-# nss_score = nss(s_map,gt)
-# print 'nss :', nss_score
-# infogain_score = infogain(s_map_norm,gt,gt)
-# print 'info gain :', infogain_score
-#
-#
-#
-# #continous gts
-# sim_score = similarity(s_map,gt)
-# print 'sim score :', sim_score
-# cc_score = cc(s_map,gt)
-# print 'cc score :',cc_score
-# kldiv_score = kldiv(s_map,gt)
-# print 'kldiv score :',kldiv_score
