@@ -65,8 +65,7 @@ def range_auc_judd(s, e, fxy_fixations_dir, sal_map_dir):
 			frame_match = np.where(fixations[:, 0] == i)
 			frame, col, row = fixations[frame_match][0]
 			tmp_gt[int(np.round(row)), int(np.round(col))] = 1
-
-		gt.append(tmp_gt)
+			gt.append(tmp_gt)
 
 	sal_map = np.stack(sal_map, axis=0)
 	gt = np.stack(gt, axis=0)
