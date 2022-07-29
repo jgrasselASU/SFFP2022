@@ -31,7 +31,7 @@ if os.getenv('SLURM_CPUS_PER_TASK', 0) != 0:
     fixation_dir = str(os.getenv('fixation_dir'))
     cpu_count = int(os.getenv('SLURM_CPUS_PER_TASK'))
     eval_dir = 'evaluation_out/'
-    overlay_dir = 'image_fixation_overlay/'
+    overlay_dir = str(os.getenv('overlay_dir'))
 else:  # Default for local testing
     image_in_dir = 'image_in/'
     gbvs_out_dir = 'gbvs_out/'
