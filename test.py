@@ -1,3 +1,5 @@
+import io
+
 import PIL.Image
 import numpy as np
 from PIL import Image, ImageDraw
@@ -12,16 +14,18 @@ from matplotlib import pyplot as plt
 
 # --------- Creating an Image Overlay Dashboard --------------- #
 
-auc_judd = np.loadtxt('evaluation_out/auc_judd_riese_drive_30sec.mp4_rad5')
+auc_judd = np.loadtxt('evaluation_out/auc_judd_riese_drive_30sec.mp4_rad2.txt')
 
-fig = plt.figure(figsize=(10, 2), dpi=100)
+plt.figure(figsize=(10, 2), dpi=100)
 plt.plot(auc_judd)
 
-fig.savefig('test_img_plt', dpi=100)
+plt.savefig('test_img_plt', dpi=100)
 
-img = PIL.Image.frombytes('RGB', fig.get_width_height(), fig.tostring_rgb())
+img_buf = io.BytesIO()
+plt.savefig(img_buf, format='png')
 
-img.save('test_img_pil.jpg')
+img = Image.open(img_buf)
+img.save('test_img_pil.png')
 
 
 
